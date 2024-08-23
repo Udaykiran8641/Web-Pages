@@ -1,0 +1,100 @@
+@import url(./section5.css);
+#section4{
+    min-height: 550px;
+    max-height: 100%;
+    max-width: 100%;
+    /* border: 3px solid red; */
+}
+#section4 h2{
+    font-size: 40px;
+    padding-top: 6%;
+    text-align: center;
+    margin: auto;
+    display: block;
+}
+#section4 ul{
+    color: aquamarine;
+   text-align:left;
+   padding-left: 10%;
+    list-style: none;
+    margin: auto;
+    display: block;
+
+}
+#section4 li{
+    color: aquamarine;
+   list-style: none;
+    display: list-item;
+    border-bottom: 0.5px solid rgb(233, 227, 227);
+    width: 90%;
+}
+#section4 details{
+    background-color: #ffff;
+    display: block;
+    color: black;
+    list-style: none;
+}
+#section4 #svg1 svg{
+    margin-left: 700px;
+   
+    vertical-align: middle;
+    transform: rotate(180deg);
+    width: 40px;
+    height: 20px;
+}
+#section4 summary{
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 26px 28px;
+    margin-top: 2px;
+    position: relative;
+    list-style: none;
+    outline: none;
+}
+#section4 svg+svg{
+    margin-left: 500px;
+   
+    vertical-align: middle;
+    transform: rotate(180deg);
+    width: 40px;
+    height: 20px;
+}
+#section4 #svg2 svg{
+    margin-left: 610px;
+    vertical-align: middle;
+    transform: rotate(180deg);
+    width: 40px;
+    height: 20px;
+}
+#section4 #svg3 svg{
+    margin-left: 576px;
+    vertical-align: middle;
+    transform: rotate(180deg);
+    width: 40px;
+    height: 20px;
+}
+
+#section4 #svg4 svg{
+    margin-left: 690px;
+    vertical-align: middle;
+    transform: rotate(180deg);
+    width: 40px;
+    height: 20px;
+}
+#section4 details p{
+    padding: 15px 32px 32px;
+    margin: 0px;
+    display: block;
+    font: inherit;
+}
+#section4 details p strong{
+    color: green;   
+}
+#section4 summary:hover{
+    background-color: #dedede;
+    text-decoration: underline;
+}
+
+
+

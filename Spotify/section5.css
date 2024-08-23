@@ -1,0 +1,35 @@
+@import url(./fotter.css);
+#section5{
+    height: 470px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    /* border: 2px solid; */
+    background-image: url("./Images/bubbles-dktp.svg"),linear-gradient(-45deg, rgb(108, 14, 224) -5%, rgb(240, 55, 166));
+}
+#section5 div h2{
+    font-size: 78px;
+    color: aliceblue;
+    text-align: center;
+    margin-top: 8px;
+    padding-top: 140px;
+}
+#section5 div{
+    margin-top: 40px;
+    display: block;
+}
+#section5 span{
+    cursor: pointer;
+    background-color: white;
+    margin-left: 600px;
+    padding: 15px;
+    width: 3%;
+    justify-content: center;
+    font-weight: 700;
+    border-radius: 50px;
+    
+}
+#section5 span:hover{
+    padding:18px;
+    /* scale: 1.1; */
+}

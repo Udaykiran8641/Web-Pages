@@ -1,0 +1,193 @@
+#fot{
+    height: 620px;
+    display: flex;
+    /* border: 3px solid red; */
+
+    width: 100%;
+    background-color: black;
+    font-family: SpotifyMixUI, CircularSp, Helvetica, Arial, sans-serif;
+}
+footer{
+    display: flex;
+}
+#fot svg{
+    height: 35px;
+}
+#fot #flogo{
+    /* border: 3px solid red; */
+    cursor: pointer;
+    align-items: center;
+    position: absolute;
+    width: 120px;
+    /* padding-top: 80px; */
+    margin-top: 80px;
+    margin-left: 160px;
+    fill: white;
+}
+#fot2{
+    /* border: 3px solid red; */
+
+   position: absolute;
+    display: flex;
+    width: 42%;
+    margin: auto;
+    color: white;
+    /* padding-top: 80px; */
+    margin-top: 80px;
+    /* padding-left: 330px; */
+    margin-left: 330px;
+}
+#fot2 h2{
+    /* border: 3px solid red; */
+
+    letter-spacing: .08em;
+    margin: 20px 0;
+    color: #919496;
+    display: block;
+    font-size: 12px;
+    font-family: SpotifyMixUI, CircularSp, Helvetica, Arial, sans-serif;
+}
+#fot2 ul{
+    /* border: 3px solid red; */
+
+    list-style-type: disc;
+    padding: 0 15px;
+    align-items: center;
+    display: inline-block;
+}
+#fot2 li{
+    /* border: 3px solid red; */
+
+    width: 110px;
+    list-style: none;
+    display: list-item;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 3px 0 15px;
+}
+#fot2 li:hover{
+    color: #1ed750;
+}
+#inlogo ul{
+    /* border: 3px solid red;  */
+    
+     /* list-style-type: disc;  */
+     /* width: 220px; */
+    /* height: 5px; */
+    display: flex;
+     text-decoration: none; 
+    list-style: none;
+    fill: white;
+}
+#inlogo li .fa-brands{
+    
+    /* border: 3px solid red; */
+    color: white;
+    margin-right: 30px;
+    background-color: #1f2122;
+    width: 50px;
+    font-size: 1.5rem;
+    
+    border-radius: 50%;
+    height: 50px ;
+    
+
+}
+#inlogo li{
+    margin-right: 25px;
+    /* border: 3px solid red; */
+    border-radius: 50%;
+    width: 51px;
+    cursor: pointer;
+    
+}
+#inlogo li .fa-brands:hover{
+    color: #1ed750;
+}
+.fa-brands{
+    padding-top: 13px;
+    padding-left: 13px;
+    /* border: 3px solid red; */
+}
+#inlogo{
+    /* border: 2px solid red; */
+    /* display: flex; */
+    /* cursor: pointer; */
+    /* border: 3px solid red; */
+    position: absolute;
+    padding: 0%;
+    /* margin: 0%; */
+    margin-left: 1000px;
+    margin-bottom: 430px;
+    box-sizing: border-box;
+    margin-top: 100px;
+    /* width: 9px; */
+    /* height: 40px; */
+    align-items: center;
+}
+#india{
+    /* border: 3px solid red; */
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    /* padding-top: 460px;
+    padding-left: 1200px; */
+    margin-left: 1200px;
+    margin-top: 460px;
+    color:#919496;
+    font-size: 10px;
+}
+#india svg{
+    margin-right: 8px;
+    width: 12px;
+    height: 13px;
+    
+}
+#india:hover{
+    color: #1ed750;
+    cursor: pointer;
+}
+#end{
+    display: flex;
+    /* border: 3px solid red; */
+    /* background-color: #1ed750; */
+    margin-top: 500px;
+    margin-left: 100px;
+    color:#919496;
+    justify-content: space-between;
+    /* width: 100%; */
+}
+#end span{
+    padding-left: 580px;
+    font-size: 12px;
+    padding-right: 10px;
+    margin: 0 15px 0 auto;
+    justify-content: space-between;
+}
+#end ul{
+    /* border: 3px solid red; */
+    height: 20px;
+    padding-right: 100px;
+    width: 80%;
+    margin-left: 10px;
+    display: flex;
+    /* margin: auto; */
+    justify-content: space-between;
+    
+}
+#end ul li{
+    cursor: pointer;
+    list-style: none;
+    /* display: inline-flex; */
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 400;
+}
+#end li:hover{
+    color: #1ed750;
+}

@@ -1,0 +1,37 @@
+@import url(./Section3.css);
+#section2{
+    height: 500px;
+    width: 80%;
+    margin: auto;
+}
+#section2 h2{
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 38px;
+    margin-top: 65px;
+}
+#section2 ul{
+    margin-top: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+}
+#section2 ul li img{
+    height: 142px;
+    width: 142px;
+    margin-left: 15%;
+    
+}
+#section2 ul li .p1{
+    font-size: 21px;
+    font-weight: bold;
+    margin-top: 15%;
+}
+#section2 ul li p{
+    font: 16px;
+    width: 85%;
+    text-align: center;
+    margin-top: 5%;
+}

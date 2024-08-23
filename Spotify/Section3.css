@@ -1,0 +1,16 @@
+@import url("./section4.css");
+#section3 {
+    background: linear-gradient(rgb(176, 35, 194) 15%, rgb(96, 11, 231));
+    height: 480px;
+    width: 100%;
+}
+#section3 div{
+    display: block;
+    color: white;
+    font-size: 33px;
+    text-align: center;
+}
+#head1{
+    padding-top: 12%;
+
+}

@@ -1,0 +1,52 @@
+@import url(./section2.css);
+#section1{
+    /* border: 2px solid red; */
+    height: 636px;
+    background-image: url("./Images/bubbles-dktp.svg"),linear-gradient(-45deg, rgb(108, 14, 224) -5%, rgb(240, 55, 166));
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+#section1 span svg{
+    height: 573px;
+    width: 286px;
+    position: absolute;
+    left: 250px;
+    top: 185px;
+
+}
+#section1 img{
+    width: 270px;
+    height: 480px;
+    position: absolute;
+    top: 235px;
+    left: 258px;
+}
+
+#section1 span h1{
+    font-size: 64px;
+    position: absolute;
+    top: 35vh;
+    left: 44%;
+    color: white;
+    right: 10vh;
+}
+#section1 button:hover{
+    /* padding: 18px 33px; */
+    scale: 1.1;
+}
+#section1 span button{
+    position: absolute;
+    cursor: pointer;
+    top: 65vh;
+    left: 44%;
+    background-color: white;
+    color: black;
+    font-size:medium;
+    font-weight: 570;
+    border: none;
+    border-radius: 2.5em;
+    padding: 15px 30px;
+    margin-bottom: 40%;
+}
+
