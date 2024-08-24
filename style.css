@@ -1,0 +1,44 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+a:link,a:visited{
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    text-decoration: none;
+}
+a:hover{
+    color: greenyellow;
+}
+body {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  padding-top: 50px;
+}
+#container {
+  width: 600px;
+  height: 300px;
+  border: 2px solid crimson;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+#container div {
+  width: 550px;
+  height: 200px;
+  border: 2px solid black;
+}
+.box{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 10px 10px 0 0 ;
+}
+.box-1{
+    background-image: url('./images/image.png');
+    background-position:top center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
