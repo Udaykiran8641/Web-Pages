@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Duplicator & Renamer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="style.css">
+    <!-- PDF-Lib and JSZip libraries (loaded globally) -->
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-100 to-blue-200 flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-2xl border border-gray-200">
+        <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">
+            PDF Duplicator & Renamer
+        </h1>
+
+        <!-- User ID display area -->
+        <p id="user-id-display" class="text-sm text-gray-600 text-center mb-4 hidden">
+            User ID: <span id="user-id-value" class="font-mono bg-gray-100 px-2 py-1 rounded-md text-xs break-all"></span>
+        </p>
+
+        <div class="mb-6">
+            <label for="pdfInput" class="block text-gray-700 text-sm font-semibold mb-2">
+                1. Upload Your Original PDF (One file)
+            </label>
+            <input
+                type="file"
+                id="pdfInput"
+                accept="application/pdf"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+            />
+            <p id="selected-file-name" class="mt-2 text-sm text-gray-600 hidden">
+                Selected: <span class="font-medium"></span>
+            </p>
+        </div>
+
+        <div class="mb-6">
+            <label for="copyCount" class="block text-gray-700 text-sm font-semibold mb-2">
+                2. Number of Copies to Generate (e.g., 100, 2000+)
+            </label>
+            <input
+                type="number"
+                id="copyCount"
+                value="100"
+                min="1"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+                placeholder="e.g., 100"
+            />
+        </div>
+
+        <div class="mb-8">
+            <label for="names-input" class="block text-gray-700 text-sm font-semibold mb-2">
+                3. Enter New Names for Each Copy (One per line)
+                <span class="text-xs text-gray-500">(Must match "Number of Copies")</span>
+            </label>
+            <textarea
+                id="names-input"
+                rows="10"
+                placeholder="e.g.,
+Invoice_001
+Report_Q1_2025
+Client_A_Document
+..."
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 resize-y min-h-[150px] transition duration-150 ease-in-out"
+            ></textarea>
+            <p id="names-count-display" class="mt-2 text-sm text-gray-600 hidden">
+                Entered names: <span class="font-medium">0</span>
+            </p>
+        </div>
+
+        <button
+            id="processAndDownloadBtn"
+            class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md"
+        >
+            Generate & Download Renamed PDFs
+        </button>
+
+        <!-- Message Box -->
+        <div
+            id="message-box"
+            class="mt-6 p-4 rounded-lg text-sm hidden"
+            role="alert"
+        >
+            <p class="font-medium mb-1">Information:</p>
+            <p id="message-content" class="whitespace-pre-wrap"></p>
+        </div>
+    </div>
+
+    <!-- Your application's JavaScript -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+/* Custom styles for the body to apply the Inter font */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Add any additional custom CSS here if needed,
+   but Tailwind classes handle most of the styling directly in HTML. */
