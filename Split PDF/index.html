@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Splitter</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PDF-LIB for PDF manipulation -->
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <!-- JSZip for creating ZIP files -->
+    <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+    <style>
+        /* Custom font for better aesthetics */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Hide file input visually but keep it accessible */
+        .hidden-input {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-2xl border border-gray-200">
+        <h1 class="text-4xl font-extrabold text-center text-gray-900 mb-8">
+            PDF Splitter
+        </h1>
+
+        <!-- File Upload Section -->
+        <div class="mb-6 border-2 border-dashed border-blue-300 rounded-lg p-6 text-center hover:border-blue-500 transition duration-300 cursor-pointer" id="drop-area">
+            <input type="file" id="pdf-upload" accept=".pdf" class="hidden-input">
+            <label for="pdf-upload" class="cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-blue-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <p class="text-lg text-gray-700 font-semibold">Drag & Drop your PDF here, or <span class="text-blue-600 underline">click to upload</span></p>
+                <p class="text-sm text-gray-500 mt-1" id="file-name">No file selected</p>
+            </label>
+        </div>
+
+        <!-- Pages per Split Input Section -->
+        <div class="mb-6">
+            <label for="pages-per-split" class="block text-gray-800 text-lg font-semibold mb-3">
+                Pages per Split PDF:
+            </label>
+            <input
+                type="number"
+                id="pages-per-split"
+                class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y text-gray-700"
+                placeholder="e.g., 3 (for 1-3, 4-6, 7-9...)"
+                min="1"
+                value="1"
+            >
+            <p class="text-sm text-gray-500 mt-2">
+                Enter the number of pages you want in each split PDF.
+            </p>
+        </div>
+
+        <!-- Action Button -->
+        <button
+            id="split-button"
+            class="w-full bg-blue-600 text-white py-4 px-6 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out font-bold text-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled
+        >
+            Split PDF & Download
+        </button>
+
+        <!-- Status and Error Messages -->
+        <div id="message-box" class="mt-8 p-4 rounded-lg text-center hidden"></div>
+    </div>
+
+    <script>
+        // Import PDF-LIB and JSZip from the global scope
+        const { PDFDocument } = PDFLib;
+        const JSZip = window.JSZip;
+
+        // Get DOM elements
+        const pdfUploadInput = document.getElementById('pdf-upload');
+        const fileNameDisplay = document.getElementById('file-name');
+        const pagesPerSplitInput = document.getElementById('pages-per-split');
+        const splitButton = document.getElementById('split-button');
+        const messageBox = document.getElementById('message-box');
+        const dropArea = document.getElementById('drop-area');
+
+        let originalPdfBytes = null; // Stores the raw bytes of the uploaded PDF
+        let originalPdfDoc = null;   // Stores the PDFDocument object of the uploaded PDF
+
+        // --- Helper Functions for UI Messages ---
+
+        /**
+         * Displays a message in the message box.
+         * @param {string} message The message to display.
+         * @param {string} type The type of message ('info', 'success', 'error').
+         */
+        function showMessage(message, type = 'info') {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700', 'bg-blue-100', 'text-blue-700');
+            messageBox.classList.add('block');
+
+            if (type === 'error') {
+                messageBox.classList.add('bg-red-100', 'text-red-700');
+            } else if (type === 'success') {
+                messageBox.classList.add('bg-green-100', 'text-green-700');
+            } else { // info
+                messageBox.classList.add('bg-blue-100', 'text-blue-700');
+            }
+        }
+
+        /**
+         * Clears all messages from the message box.
+         */
+        function clearMessages() {
+            messageBox.textContent = '';
+            messageBox.classList.add('hidden');
+            messageBox.classList.remove('bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700', 'bg-blue-100', 'text-blue-700');
+        }
+
+        /**
+         * Updates the button state (enabled/disabled).
+         */
+        function updateButtonState() {
+            const pagesPerSplitValue = parseInt(pagesPerSplitInput.value, 10);
+            splitButton.disabled = !originalPdfDoc || isNaN(pagesPerSplitValue) || pagesPerSplitValue < 1;
+        }
+
+        // --- PDF File Handling ---
+
+        /**
+         * Handles the file selection from input or drag-and-drop.
+         * @param {File} file The PDF file object.
+         */
+        async function handlePdfFile(file) {
+            clearMessages();
+            if (file.type !== 'application/pdf') {
+                showMessage('Please upload a valid PDF file.', 'error');
+                fileNameDisplay.textContent = 'No file selected';
+                originalPdfBytes = null;
+                originalPdfDoc = null;
+                updateButtonState();
+                return;
+            }
+
+            fileNameDisplay.textContent = `Loading: ${file.name}`;
+            showMessage('Reading PDF file...', 'info');
+            splitButton.disabled = true; // Disable button while loading
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    originalPdfBytes = new Uint8Array(e.target.result);
+                    originalPdfDoc = await PDFDocument.load(originalPdfBytes);
+                    fileNameDisplay.textContent = `${file.name} (${originalPdfDoc.getPageCount()} pages)`;
+                    showMessage(`PDF loaded successfully! Total pages: ${originalPdfDoc.getPageCount()}.`, 'success');
+                } catch (err) {
+                    console.error('Error loading PDF:', err);
+                    showMessage('Failed to load PDF. It might be corrupted or encrypted.', 'error');
+                    fileNameDisplay.textContent = 'Error loading file';
+                    originalPdfBytes = null;
+                    originalPdfDoc = null;
+                } finally {
+                    updateButtonState(); // Re-enable button if PDF loaded
+                }
+            };
+            reader.onerror = () => {
+                showMessage('Error reading file.', 'error');
+                fileNameDisplay.textContent = 'Error reading file';
+                originalPdfBytes = null;
+                originalPdfDoc = null;
+                updateButtonState();
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // --- Page Splitting Logic ---
+
+        /**
+         * Generates page ranges based on the 'pages per split' value.
+         * @param {number} pagesPerSplit The number of pages for each split PDF.
+         * @param {number} totalPages The total number of pages in the original PDF.
+         * @returns {Array<Array<number>>} An array where each inner array represents pages for one split PDF (0-indexed).
+         */
+        function generatePageRanges(pagesPerSplit, totalPages) {
+            const splitDocumentsPages = [];
+            if (pagesPerSplit < 1) {
+                throw new Error('Pages per split must be at least 1.');
+            }
+
+            for (let i = 0; i < totalPages; i += pagesPerSplit) {
+                const currentDocPages = [];
+                for (let j = 0; j < pagesPerSplit && (i + j) < totalPages; j++) {
+                    currentDocPages.push(i + j); // 0-indexed page number
+                }
+                if (currentDocPages.length > 0) {
+                    splitDocumentsPages.push(currentDocPages);
+                }
+            }
+            return splitDocumentsPages;
+        }
+
+        // --- PDF Splitting and Downloading Logic ---
+
+        /**
+         * Initiates the PDF splitting and ZIP download process.
+         */
+        async function splitPdfAndDownload() {
+            clearMessages();
+            if (!originalPdfDoc) {
+                showMessage('Please upload a PDF first.', 'error');
+                return;
+            }
+
+            const pagesPerSplit = parseInt(pagesPerSplitInput.value, 10);
+            if (isNaN(pagesPerSplit) || pagesPerSplit < 1) {
+                showMessage('Please enter a valid number (at least 1) for pages per split.', 'error');
+                return;
+            }
+
+            splitButton.disabled = true;
+            showMessage('Splitting PDF and preparing download...', 'info');
+
+            try {
+                const totalPages = originalPdfDoc.getPageCount();
+                const splitDocumentsPages = generatePageRanges(pagesPerSplit, totalPages);
+
+                const zip = new JSZip();
+                let fileCount = 0;
+
+                for (const pageSet of splitDocumentsPages) {
+                    if (pageSet.length === 0) continue; // Should not happen with generatePageRanges but good for safety
+
+                    const newPdfDoc = await PDFDocument.create();
+                    // Copy pages from original to new document
+                    const copiedPages = await newPdfDoc.copyPages(originalPdfDoc, pageSet);
+                    copiedPages.forEach(page => newPdfDoc.addPage(page));
+
+                    const pdfBytes = await newPdfDoc.save();
+                    fileCount++;
+                    // Generate a descriptive file name for each split PDF
+                    const startPage = pageSet[0] + 1;
+                    const endPage = pageSet[pageSet.length - 1] + 1;
+                    const fileName = `split_part_${fileCount}_pages_${startPage}-${endPage}.pdf`;
+                    zip.file(fileName, pdfBytes);
+                }
+
+                if (fileCount === 0) {
+                    throw new Error('No PDF files were created. Check your "Pages per Split" value.');
+                }
+
+                const zipBlob = await zip.generateAsync({ type: 'blob' });
+
+                // Create a temporary link and trigger download
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(zipBlob);
+                downloadLink.download = 'split_pdfs.zip';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                URL.revokeObjectURL(downloadLink.href); // Clean up the URL object
+
+                showMessage(`Successfully split PDF into ${fileCount} files and downloaded as split_pdfs.zip!`, 'success');
+
+            } catch (error) {
+                console.error('Error during splitting or download:', error);
+                showMessage(`Error: ${error.message}`, 'error');
+            } finally {
+                splitButton.disabled = false; // Re-enable button
+            }
+        }
+
+        // --- Event Listeners ---
+
+        // Listen for file input changes
+        pdfUploadInput.addEventListener('change', (event) => {
+            if (event.target.files.length > 0) {
+                handlePdfFile(event.target.files[0]);
+            }
+        });
+
+        // Listen for pages per split input changes to update button state
+        pagesPerSplitInput.addEventListener('input', updateButtonState);
+
+        // Listen for split button click
+        splitButton.addEventListener('click', splitPdfAndDownload);
+
+        // --- Drag and Drop functionality ---
+        dropArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropArea.classList.add('border-blue-500', 'bg-blue-50');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('border-blue-500', 'bg-blue-50');
+        });
+
+        dropArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropArea.classList.remove('border-blue-500', 'bg-blue-50');
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                handlePdfFile(files[0]);
+            }
+        });
+
+        // Initial button state update
+        updateButtonState();
+    </script>
+</body>
+</html>
